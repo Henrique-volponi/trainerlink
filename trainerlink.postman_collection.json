@@ -1,0 +1,472 @@
+{
+  "info": {
+    "name": "TrainerLink",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    }
+  ],
+  "item": [
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "POST /usuarios",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Carlos Silva\",\n  \"email\": \"carlos@email.com\",\n  \"senha_hash\": \"hashed_password_aqui\",\n  \"tipo\": \"aluno\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Cadastra um novo usuário do tipo aluno ou personal."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"nome\": \"Carlos Silva\",\n  \"email\": \"carlos@email.com\",\n  \"tipo\": \"aluno\",\n  \"criado_em\": \"2024-06-01T10:00:00.000Z\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/usuarios" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Carlos Silva\",\n  \"email\": \"carlos@email.com\",\n  \"senha_hash\": \"hashed_password_aqui\",\n  \"tipo\": \"aluno\"\n}"
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request – campos obrigatórios",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"nome, email, senha_hash e tipo são obrigatórios\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/usuarios" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Carlos Silva\"\n}"
+                }
+              }
+            },
+            {
+              "name": "409 Conflict – email duplicado",
+              "status": "Conflict",
+              "code": 409,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"Email já cadastrado\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/usuarios" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Carlos Silva\",\n  \"email\": \"carlos@email.com\",\n  \"senha_hash\": \"hashed_password_aqui\",\n  \"tipo\": \"aluno\"\n}"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Personals",
+      "item": [
+        {
+          "name": "GET /personals",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/personals",
+              "host": ["{{baseUrl}}"],
+              "path": ["personals"]
+            },
+            "description": "Lista todos os usuários do tipo personal."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 2,\n    \"nome\": \"Ana Trainer\",\n    \"email\": \"ana@email.com\",\n    \"tipo\": \"personal\",\n    \"criado_em\": \"2024-06-01T09:00:00.000Z\"\n  },\n  {\n    \"id\": 3,\n    \"nome\": \"João Personal\",\n    \"email\": \"joao@email.com\",\n    \"tipo\": \"personal\",\n    \"criado_em\": \"2024-06-01T09:30:00.000Z\"\n  }\n]",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/personals" }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Agendamentos",
+      "item": [
+        {
+          "name": "POST /agendamentos",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/agendamentos",
+              "host": ["{{baseUrl}}"],
+              "path": ["agendamentos"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aluno_id\": 1,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Aluno cria uma solicitação de agendamento com um personal."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"aluno_id\": 1,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60,\n  \"status\": \"pendente\",\n  \"criado_em\": \"2024-06-01T10:05:00.000Z\",\n  \"atualizado_em\": \"2024-06-01T10:05:00.000Z\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/agendamentos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"aluno_id\": 1,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60\n}"
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request – campos obrigatórios",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"aluno_id, personal_id, data_hora e duracao_minutos são obrigatórios\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/agendamentos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"aluno_id\": 1\n}"
+                }
+              }
+            },
+            {
+              "name": "422 Unprocessable – aluno_id inválido",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"aluno_id não corresponde a um aluno válido\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/agendamentos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"aluno_id\": 2,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60\n}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /agendamentos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/agendamentos",
+              "host": ["{{baseUrl}}"],
+              "path": ["agendamentos"],
+              "query": [
+                { "key": "aluno_id",    "value": "1",  "disabled": true },
+                { "key": "personal_id", "value": "2",  "disabled": true }
+              ]
+            },
+            "description": "Lista todos os agendamentos. Filtre opcionalmente com ?aluno_id= ou ?personal_id=."
+          },
+          "response": [
+            {
+              "name": "200 OK – sem filtro",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 1,\n    \"aluno_id\": 1,\n    \"personal_id\": 2,\n    \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n    \"duracao_minutos\": 60,\n    \"status\": \"pendente\",\n    \"criado_em\": \"2024-06-01T10:05:00.000Z\",\n    \"atualizado_em\": \"2024-06-01T10:05:00.000Z\"\n  }\n]",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/agendamentos" }
+              }
+            },
+            {
+              "name": "200 OK – filtrado por aluno_id",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 1,\n    \"aluno_id\": 1,\n    \"personal_id\": 2,\n    \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n    \"duracao_minutos\": 60,\n    \"status\": \"confirmado\",\n    \"criado_em\": \"2024-06-01T10:05:00.000Z\",\n    \"atualizado_em\": \"2024-06-02T08:00:00.000Z\"\n  }\n]",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/agendamentos?aluno_id=1" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /agendamentos/:id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/agendamentos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["agendamentos", "1"]
+            },
+            "description": "Busca um agendamento específico pelo ID."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"aluno_id\": 1,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60,\n  \"status\": \"confirmado\",\n  \"criado_em\": \"2024-06-01T10:05:00.000Z\",\n  \"atualizado_em\": \"2024-06-02T08:00:00.000Z\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/agendamentos/1" }
+              }
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"Agendamento não encontrado\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/agendamentos/999" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH /agendamentos/:id/status",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/agendamentos/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["agendamentos", "1", "status"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmado\",\n  \"personal_id\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Atualiza o status de um agendamento. personal_id é opcional (permite reatribuição)."
+          },
+          "response": [
+            {
+              "name": "200 OK – confirmado",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"aluno_id\": 1,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60,\n  \"status\": \"confirmado\",\n  \"criado_em\": \"2024-06-01T10:05:00.000Z\",\n  \"atualizado_em\": \"2024-06-02T08:00:00.000Z\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": { "raw": "{{baseUrl}}/agendamentos/1/status" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"confirmado\",\n  \"personal_id\": 2\n}"
+                }
+              }
+            },
+            {
+              "name": "200 OK – concluido",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"aluno_id\": 1,\n  \"personal_id\": 2,\n  \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n  \"duracao_minutos\": 60,\n  \"status\": \"concluido\",\n  \"criado_em\": \"2024-06-01T10:05:00.000Z\",\n  \"atualizado_em\": \"2024-06-10T09:05:00.000Z\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": { "raw": "{{baseUrl}}/agendamentos/1/status" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"concluido\"\n}"
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request – status inválido",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"status deve ser um de: confirmado, recusado, concluido\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": { "raw": "{{baseUrl}}/agendamentos/1/status" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"invalido\"\n}"
+                }
+              }
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"Agendamento não encontrado\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": { "raw": "{{baseUrl}}/agendamentos/999/status" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"confirmado\"\n}"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Treinos",
+      "item": [
+        {
+          "name": "POST /treinos",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/treinos",
+              "host": ["{{baseUrl}}"],
+              "path": ["treinos"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"agendamento_id\": 1,\n  \"peso_kg\": 75.5,\n  \"observacoes\": \"Aluno demonstrou boa evolução no agachamento. Aumentar carga na próxima sessão.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Personal registra o treino após sessão concluída. O agendamento deve ter status 'concluido'."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"agendamento_id\": 1,\n  \"peso_kg\": \"75.50\",\n  \"observacoes\": \"Aluno demonstrou boa evolução no agachamento. Aumentar carga na próxima sessão.\",\n  \"criado_em\": \"2024-06-10T09:10:00.000Z\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/treinos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agendamento_id\": 1,\n  \"peso_kg\": 75.5,\n  \"observacoes\": \"Aluno demonstrou boa evolução no agachamento. Aumentar carga na próxima sessão.\"\n}"
+                }
+              }
+            },
+            {
+              "name": "400 Bad Request – agendamento_id ausente",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"agendamento_id é obrigatório\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/treinos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"peso_kg\": 75.5\n}"
+                }
+              }
+            },
+            {
+              "name": "404 Not Found – agendamento inexistente",
+              "status": "Not Found",
+              "code": 404,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"Agendamento não encontrado\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/treinos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agendamento_id\": 999,\n  \"peso_kg\": 75.5\n}"
+                }
+              }
+            },
+            {
+              "name": "422 Unprocessable – agendamento não concluído",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"Treino só pode ser registrado para agendamento com status concluido\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/treinos" },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agendamento_id\": 1,\n  \"peso_kg\": 75.5\n}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /treinos?aluno_id=1",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/treinos?aluno_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["treinos"],
+              "query": [
+                { "key": "aluno_id", "value": "1" }
+              ]
+            },
+            "description": "Lista o histórico de treinos de um aluno. aluno_id é obrigatório."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 1,\n    \"agendamento_id\": 1,\n    \"peso_kg\": \"75.50\",\n    \"observacoes\": \"Aluno demonstrou boa evolução no agachamento. Aumentar carga na próxima sessão.\",\n    \"criado_em\": \"2024-06-10T09:10:00.000Z\",\n    \"data_hora\": \"2024-06-10T08:00:00.000Z\",\n    \"personal_id\": 2,\n    \"duracao_minutos\": 60\n  }\n]",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/treinos?aluno_id=1" }
+              }
+            },
+            {
+              "name": "400 Bad Request – aluno_id ausente",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"erro\": \"Query param aluno_id é obrigatório\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/treinos" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
